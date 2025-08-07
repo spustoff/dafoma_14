@@ -17,6 +17,15 @@ class MindfulnessService: ObservableObject {
     private var sessionTimer: Timer?
     
     func startMindfulnessSession(challenge: MindfulnessChallenge) {
+        // End any existing session first
+        endSession()
+        
+        // Validate challenge duration
+        guard challenge.duration > 0 else {
+            print("Invalid challenge duration: \(challenge.duration)")
+            return
+        }
+        
         currentSession = MindfulnessSession(
             challenge: challenge,
             startTime: Date(),
@@ -47,9 +56,17 @@ class MindfulnessService: ObservableObject {
     }
     
     private func startTimer() {
-        sessionTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
+        // Invalidate existing timer if any
+        sessionTimer?.invalidate()
+        
+        sessionTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] timer in
             Task { @MainActor in
-                guard let self = self else { return }
+                guard let self = self,
+                      self.currentSession != nil,
+                      self.isSessionActive else {
+                    timer.invalidate()
+                    return
+                }
                 
                 if self.sessionTimeRemaining > 0 {
                     self.sessionTimeRemaining -= 1
@@ -147,7 +164,7 @@ class MindfulnessService: ObservableObject {
     }
 }
 
-class MindfulnessSession: ObservableObject {
+class MindfulnessSession: ObservableObject, Equatable {
     let challenge: MindfulnessChallenge
     let startTime: Date
     let duration: Int
@@ -157,6 +174,12 @@ class MindfulnessSession: ObservableObject {
         self.challenge = challenge
         self.startTime = startTime
         self.duration = duration
+    }
+    
+    static func == (lhs: MindfulnessSession, rhs: MindfulnessSession) -> Bool {
+        return lhs.challenge == rhs.challenge && 
+               lhs.startTime == rhs.startTime && 
+               lhs.duration == rhs.duration
     }
 }
 

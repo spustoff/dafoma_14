@@ -26,6 +26,7 @@ struct ContentView: View {
 struct MainTabView: View {
     @ObservedObject var userViewModel: UserViewModel
     @ObservedObject var gameViewModel: GameProgressViewModel
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
     var body: some View {
         TabView {
@@ -41,7 +42,13 @@ struct MainTabView: View {
                     Text("Profile")
                 }
         }
-        .accentColor(Color(hex: "#fbaa1a"))
+        .accentColor(Color.orange)
+        .onAppear {
+            // Configure for iPad
+            if horizontalSizeClass == .regular {
+                UITabBar.appearance().unselectedItemTintColor = UIColor.white.withAlphaComponent(0.6)
+            }
+        }
     }
 }
 

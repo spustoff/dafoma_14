@@ -20,9 +20,9 @@ struct AdventureGameView: View {
                 // Background gradient
                 LinearGradient(
                     colors: [
-                        Color(hex: "#2490ad"),
-                        Color(hex: "#3c166d"),
-                        Color(hex: "#1a2962")
+                        Color.blue,
+                        Color.purple,
+                        Color.indigo
                     ],
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing
@@ -87,7 +87,7 @@ struct PlayerStatsView: View {
                     
                     Text("Level \(userViewModel.user.currentLevel) • \(userViewModel.user.totalExperience) XP")
                         .font(.system(size: 14, weight: .medium))
-                        .foregroundColor(Color(hex: "#fbaa1a"))
+                        .foregroundColor(Color.orange)
                 }
                 
                 Spacer()
@@ -116,7 +116,7 @@ struct PlayerStatsView: View {
                 }
                 
                 ProgressView(value: userViewModel.getProgressToNextLevel())
-                    .progressViewStyle(LinearProgressViewStyle(tint: Color(hex: "#fbaa1a")))
+                    .progressViewStyle(LinearProgressViewStyle(tint: Color.orange))
                     .background(Color.white.opacity(0.2))
                     .cornerRadius(5)
             }
@@ -201,7 +201,7 @@ struct CurrentLevelView: View {
                 .font(.system(size: 16, weight: .semibold))
                 .frame(maxWidth: .infinity)
                 .padding()
-                .background(Color(hex: "#01ff00"))
+                .background(Color.green)
                 .cornerRadius(12)
             }
         }
@@ -209,7 +209,7 @@ struct CurrentLevelView: View {
         .background(
             LinearGradient(
                 colors: [
-                    Color(hex: level.theme.backgroundColor).opacity(0.3),
+                    Color.blue.opacity(0.3),
                     Color.white.opacity(0.1)
                 ],
                 startPoint: .topLeading,
@@ -234,7 +234,7 @@ struct PhysicalChallengeRow: View {
         HStack {
             Image(systemName: challenge.activityType.icon)
                 .font(.system(size: 20))
-                .foregroundColor(challenge.isCompleted ? Color(hex: "#01ff00") : Color(hex: "#fbaa1a"))
+                .foregroundColor(challenge.isCompleted ? Color.green : Color(hex: "#fbaa1a"))
                 .frame(width: 30)
             
             VStack(alignment: .leading, spacing: 2) {
@@ -247,7 +247,7 @@ struct PhysicalChallengeRow: View {
                     .foregroundColor(.white.opacity(0.8))
                 
                 ProgressView(value: currentProgress)
-                    .progressViewStyle(LinearProgressViewStyle(tint: Color(hex: "#fbaa1a")))
+                    .progressViewStyle(LinearProgressViewStyle(tint: Color.orange))
                     .background(Color.white.opacity(0.2))
             }
             
@@ -255,7 +255,7 @@ struct PhysicalChallengeRow: View {
             
             if challenge.isCompleted {
                 Image(systemName: "checkmark.circle.fill")
-                    .foregroundColor(Color(hex: "#01ff00"))
+                    .foregroundColor(Color.green)
             } else if currentProgress >= 1.0 {
                 Button("Complete") {
                     gameViewModel.completePhysicalChallenge(challenge.id, in: levelNumber)
@@ -265,7 +265,7 @@ struct PhysicalChallengeRow: View {
                 .foregroundColor(.black)
                 .padding(.horizontal, 12)
                 .padding(.vertical, 6)
-                .background(Color(hex: "#01ff00"))
+                .background(Color.green)
                 .cornerRadius(8)
             } else {
                 Text("\(Int(currentProgress * 100))%")
@@ -288,7 +288,7 @@ struct MindfulnessChallengeRow: View {
         HStack {
             Image(systemName: challenge.type.icon)
                 .font(.system(size: 20))
-                .foregroundColor(challenge.isCompleted ? Color(hex: "#01ff00") : Color(hex: "#f0048d"))
+                .foregroundColor(challenge.isCompleted ? Color.green : Color.pink)
                 .frame(width: 30)
             
             VStack(alignment: .leading, spacing: 2) {
@@ -302,14 +302,14 @@ struct MindfulnessChallengeRow: View {
                 
                 Text("\(challenge.duration) minutes")
                     .font(.system(size: 11))
-                    .foregroundColor(Color(hex: "#f0048d"))
+                    .foregroundColor(Color.pink)
             }
             
             Spacer()
             
             if challenge.isCompleted {
                 Image(systemName: "checkmark.circle.fill")
-                    .foregroundColor(Color(hex: "#01ff00"))
+                    .foregroundColor(Color.green)
             } else {
                 Button("Start") {
                     selectedChallenge = challenge
@@ -319,7 +319,7 @@ struct MindfulnessChallengeRow: View {
                 .foregroundColor(.white)
                 .padding(.horizontal, 12)
                 .padding(.vertical, 6)
-                .background(Color(hex: "#f0048d"))
+                .background(Color.pink)
                 .cornerRadius(8)
             }
         }
@@ -367,13 +367,13 @@ struct LevelCardView: View {
             
             Text("Level \(level.number)")
                 .font(.system(size: 12, weight: .medium))
-                .foregroundColor(Color(hex: "#fbaa1a"))
+                .foregroundColor(Color.orange)
             
             Spacer()
             
             CircularProgressView(
                 progress: gameViewModel.getLevelProgress(level),
-                color: Color(hex: level.theme.backgroundColor)
+                color: Color.blue
             )
             .frame(width: 30, height: 30)
         }
@@ -382,7 +382,7 @@ struct LevelCardView: View {
         .background(
             LinearGradient(
                 colors: [
-                    Color(hex: level.theme.backgroundColor).opacity(0.3),
+                    Color.blue.opacity(0.3),
                     Color.white.opacity(0.1)
                 ],
                 startPoint: .topLeading,
@@ -563,7 +563,7 @@ struct QuickActivityLoggerView: View {
                 .foregroundColor(.black)
                 .padding(.horizontal, 12)
                 .padding(.vertical, 6)
-                .background(Color(hex: "#01ff00"))
+                .background(Color.green)
                 .cornerRadius(8)
             }
             
@@ -711,16 +711,22 @@ struct MoodSelectorView: View {
             }
             .navigationTitle("Mood Check-in")
             .navigationBarTitleDisplayMode(.inline)
-            .navigationBarItems(
-                leading: Button("Cancel") {
-                    presentationMode.wrappedValue.dismiss()
-                },
-                trailing: Button("Save") {
-                    userViewModel.updateMood(selectedMood, note: note)
-                    userViewModel.activityService.updateEnergyLevel(selectedEnergy)
-                    presentationMode.wrappedValue.dismiss()
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button("Cancel") {
+                        presentationMode.wrappedValue.dismiss()
+                    }
+                    .foregroundColor(.white)
                 }
-            )
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Save") {
+                        userViewModel.updateMood(selectedMood, note: note)
+                        userViewModel.activityService.updateEnergyLevel(selectedEnergy)
+                        presentationMode.wrappedValue.dismiss()
+                    }
+                    .foregroundColor(.white)
+                }
+            }
         }
         .onAppear {
             selectedMood = userViewModel.activityService.currentMood
@@ -895,18 +901,21 @@ struct ActivityLoggerView: View {
                     .foregroundColor(.black)
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color(hex: "#01ff00"))
+                    .background(Color.green)
                     .cornerRadius(15)
                 }
                 .padding()
             }
             .navigationTitle("Log Activity")
             .navigationBarTitleDisplayMode(.inline)
-            .navigationBarItems(
-                trailing: Button("Cancel") {
-                    presentationMode.wrappedValue.dismiss()
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Cancel") {
+                        presentationMode.wrappedValue.dismiss()
+                    }
+                    .foregroundColor(.white)
                 }
-            )
+            }
         }
     }
 } 

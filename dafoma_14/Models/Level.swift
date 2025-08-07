@@ -81,7 +81,7 @@ struct PhysicalChallenge: Identifiable, Codable {
     }
 }
 
-struct MindfulnessChallenge: Identifiable, Codable {
+struct MindfulnessChallenge: Identifiable, Codable, Equatable {
     let id = UUID()
     let title: String
     let description: String
@@ -95,6 +95,10 @@ struct MindfulnessChallenge: Identifiable, Codable {
         self.duration = duration
         self.type = type
         self.isCompleted = false
+    }
+    
+    static func == (lhs: MindfulnessChallenge, rhs: MindfulnessChallenge) -> Bool {
+        return lhs.id == rhs.id
     }
 }
 

@@ -50,9 +50,7 @@ class GameProgressViewModel: ObservableObject {
                     PhysicalChallenge(title: "Nature Walk", description: "Take 5,000 steps", activityType: .walking, targetValue: 5000, unit: "steps"),
                     PhysicalChallenge(title: "Forest Energy", description: "Burn 150 calories", activityType: .cardio, targetValue: 150, unit: "calories")
                 ],
-                mindfulnessChallenges: [
-                    MindfulnessChallenge(title: "Forest Breathing", description: "Practice deep breathing in nature", duration: 5, type: .breathing)
-                ],
+                mindfulnessChallenges: [],
                 rewards: ["Forest Explorer Badge", "100 XP", "New Avatar Outfit"]
             ),
             Level(

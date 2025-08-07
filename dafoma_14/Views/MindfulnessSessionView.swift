@@ -42,16 +42,21 @@ struct MindfulnessSessionView: View {
                         )
                     }
                 }
+                .animation(.easeInOut(duration: 0.3), value: mindfulnessService.currentSession)
                 .padding()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
             .navigationTitle(challenge.title)
             .navigationBarTitleDisplayMode(.inline)
-            .navigationBarItems(
-                leading: Button("Close") {
-                    mindfulnessService.endSession()
-                    presentationMode.wrappedValue.dismiss()
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button("Close") {
+                        mindfulnessService.endSession()
+                        presentationMode.wrappedValue.dismiss()
+                    }
+                    .foregroundColor(.white)
                 }
-            )
+            }
         }
         .onDisappear {
             if mindfulnessService.currentSession?.isCompleted == true {
@@ -67,13 +72,13 @@ struct MindfulnessSessionView: View {
     private var gradientColors: [Color] {
         switch challenge.type {
         case .breathing:
-            return [Color(hex: "#2490ad"), Color(hex: "#1a2962")]
+            return [Color.blue, Color.purple] // Fallback for hex colors
         case .meditation:
-            return [Color(hex: "#3c166d"), Color(hex: "#1a2962")]
+            return [Color.purple, Color.blue]
         case .gratitude:
-            return [Color(hex: "#fbaa1a").opacity(0.7), Color(hex: "#f0048d").opacity(0.7)]
+            return [Color.orange, Color.pink]
         case .visualization:
-            return [Color(hex: "#01ff00").opacity(0.6), Color(hex: "#2490ad")]
+            return [Color.green, Color.blue]
         }
     }
 }
@@ -102,10 +107,10 @@ struct PreSessionView: View {
                 
                 HStack {
                     Image(systemName: "clock")
-                        .foregroundColor(Color(hex: "#fbaa1a"))
+                        .foregroundColor(Color.orange)
                     Text("\(challenge.duration) minutes")
                         .font(.system(size: 16, weight: .medium))
-                        .foregroundColor(Color(hex: "#fbaa1a"))
+                        .foregroundColor(Color.orange)
                 }
             }
             
@@ -136,9 +141,10 @@ struct PreSessionView: View {
             .foregroundColor(.black)
             .frame(maxWidth: .infinity)
             .padding()
-            .background(Color(hex: "#01ff00"))
+            .background(Color.green)
             .cornerRadius(15)
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 
@@ -148,7 +154,7 @@ struct PreparationStep: View {
     var body: some View {
         HStack {
             Image(systemName: "checkmark.circle.fill")
-                .foregroundColor(Color(hex: "#01ff00"))
+                .foregroundColor(Color.green)
             Text(text)
                 .font(.system(size: 16))
                 .foregroundColor(.white)
@@ -172,10 +178,11 @@ struct ActiveSessionView: View {
         let totalTime = session.duration
         let remaining = mindfulnessService.sessionTimeRemaining
         let elapsed = totalTime - remaining
+        let progressRatio = Double(elapsed) / Double(totalTime)
         
-        if elapsed < totalTime * 1 {
+        if progressRatio < 0.2 {
             return .beginning
-        } else if elapsed > totalTime * 1 {
+        } else if progressRatio > 0.8 {
             return .end
         } else {
             return .middle
@@ -213,7 +220,7 @@ struct ActiveSessionView: View {
                         
                         Circle()
                             .trim(from: 0, to: 1 - (Double(mindfulnessService.sessionTimeRemaining) / Double(session.duration)))
-                            .stroke(Color(hex: "#01ff00"), style: StrokeStyle(lineWidth: 8, lineCap: .round))
+                            .stroke(Color.green, style: StrokeStyle(lineWidth: 8, lineCap: .round))
                             .frame(width: 200, height: 200)
                             .rotationEffect(.degrees(-90))
                         
@@ -265,7 +272,7 @@ struct ActiveSessionView: View {
                             }
                             .foregroundColor(.black)
                             .padding()
-                            .background(Color(hex: "#fbaa1a"))
+                            .background(Color.orange)
                             .cornerRadius(10)
                         }
                     }
@@ -284,7 +291,7 @@ struct BreathingAnimationView: View {
             Circle()
                 .fill(
                     RadialGradient(
-                        colors: [Color(hex: "#01ff00").opacity(0.6), Color.clear],
+                        colors: [Color.green.opacity(0.6), Color.clear],
                         center: .center,
                         startRadius: 10,
                         endRadius: 60
@@ -365,9 +372,9 @@ struct SessionCompletedView: View {
                     .foregroundColor(.white)
                 
                 VStack(spacing: 10) {
-                    RewardRow(icon: "star.fill", text: "+75 XP", color: "#fbaa1a")
-                    RewardRow(icon: "checkmark.circle.fill", text: "Challenge Completed", color: "#01ff00")
-                    RewardRow(icon: "brain.head.profile", text: "Mindfulness Progress", color: "#f0048d")
+                    RewardRow(icon: "star.fill", text: "+75 XP", color: "orange")
+                    RewardRow(icon: "checkmark.circle.fill", text: "Challenge Completed", color: "green")
+                    RewardRow(icon: "brain.head.profile", text: "Mindfulness Progress", color: "pink")
                 }
             }
             .padding()
@@ -391,7 +398,7 @@ struct RewardRow: View {
     var body: some View {
         HStack {
             Image(systemName: icon)
-                .foregroundColor(Color(hex: color))
+                .foregroundColor(colorFromString(color))
                 .frame(width: 24)
             
             Text(text)
@@ -401,5 +408,17 @@ struct RewardRow: View {
             Spacer()
         }
         .padding(.horizontal)
+    }
+    
+    private func colorFromString(_ colorName: String) -> Color {
+        switch colorName.lowercased() {
+        case "orange": return .orange
+        case "green": return .green
+        case "pink": return .pink
+        case "blue": return .blue
+        case "red": return .red
+        case "yellow": return .yellow
+        default: return .white
+        }
     }
 } 

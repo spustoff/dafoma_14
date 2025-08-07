@@ -330,6 +330,8 @@ struct QuestProgressRow: View {
 
 struct SettingsSection: View {
     @Binding var showEditProfile: Bool
+    @State private var isShowingHealthAlert = false
+    @State private var healthSyncMessage = ""
     
     var body: some View {
         VStack(alignment: .leading, spacing: 15) {
@@ -344,7 +346,7 @@ struct SettingsSection: View {
             }
             
             Button(action: {
-                // Health sync action
+                requestHealthDataSync()
             }) {
                 SettingsRow(title: "Sync Health Data", icon: "heart.fill", color: "#f0048d")
             }
@@ -358,6 +360,17 @@ struct SettingsSection: View {
         .padding()
         .background(Color.white.opacity(0.1))
         .cornerRadius(15)
+        .alert("Health Data Sync", isPresented: $isShowingHealthAlert) {
+            Button("OK") { }
+        } message: {
+            Text(healthSyncMessage)
+        }
+    }
+    
+    private func requestHealthDataSync() {
+        // Simulate health data sync functionality
+        healthSyncMessage = "Health data sync is now enabled. Your activity data will be synchronized with your device's health app."
+        isShowingHealthAlert = true
     }
 }
 
@@ -501,15 +514,21 @@ struct EditProfileView: View {
             }
             .navigationTitle("Edit Profile")
             .navigationBarTitleDisplayMode(.inline)
-            .navigationBarItems(
-                leading: Button("Cancel") {
-                    presentationMode.wrappedValue.dismiss()
-                },
-                trailing: Button("Save") {
-                    saveProfile()
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button("Cancel") {
+                        presentationMode.wrappedValue.dismiss()
+                    }
+                    .foregroundColor(.white)
                 }
-                .disabled(name.trimmingCharacters(in: .whitespaces).isEmpty)
-            )
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Save") {
+                        saveProfile()
+                    }
+                    .foregroundColor(.white)
+                    .disabled(name.trimmingCharacters(in: .whitespaces).isEmpty)
+                }
+            }
         }
     }
     
@@ -569,11 +588,14 @@ struct AchievementsView: View {
             }
             .navigationTitle("Achievements")
             .navigationBarTitleDisplayMode(.inline)
-            .navigationBarItems(
-                trailing: Button("Done") {
-                    presentationMode.wrappedValue.dismiss()
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Done") {
+                        presentationMode.wrappedValue.dismiss()
+                    }
+                    .foregroundColor(.white)
                 }
-            )
+            }
         }
     }
 }
