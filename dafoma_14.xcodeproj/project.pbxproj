@@ -254,7 +254,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"dafoma_14/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = HealthPlinQuest;
+				INFOPLIST_KEY_CFBundleDisplayName = "PlinHealthQuest: Mind & Body";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "We need your access to use our features about health";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -267,7 +267,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "app.dafoma-14";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -290,7 +290,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"dafoma_14/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = HealthPlinQuest;
+				INFOPLIST_KEY_CFBundleDisplayName = "PlinHealthQuest: Mind & Body";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "We need your access to use our features about health";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -303,7 +303,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "app.dafoma-14";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
